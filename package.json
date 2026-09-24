@@ -1,7 +1,7 @@
 {
 	"name": "remreload",
 	"displayName": "Remreload",
-	"description": "Automatically reload remote SSH window on connection loss",
+	"description": "Automatically reload remote SSH and tunnel windows on connection loss",
 	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.62.0"
@@ -21,10 +21,33 @@
 			{
 				"title": "Remreload",
 				"properties": {
+					"remreload.remoteSsh.enabled": {
+						"type": "boolean",
+						"default": true,
+						"markdownDescription": "Enable connectivity checks and automatic window reloads for Remote SSH sessions."
+					},
+					"remreload.remoteSsh.checkConnectivityCommand": {
+						"type": "string",
+						"default": "ping -t 1 -c 1 google.com",
+						"scope": "resource",
+						"markdownDescription": "After a Remote SSH connection is lost, run this command on the local machine until it succeeds before reloading the window. Use it to wait for network or VPN connectivity."
+					},
+					"remreload.remoteTunnel.enabled": {
+						"type": "boolean",
+						"default": true,
+						"markdownDescription": "Enable connectivity checks and automatic window reloads for Remote Tunnel sessions."
+					},
+					"remreload.remoteTunnel.checkConnectivityCommand": {
+						"type": "string",
+						"default": "ping -t 1 -c 1 google.com",
+						"markdownDescription": "After a Remote Tunnel connection is lost, run this command on the local machine until it succeeds before reloading the window. Use it to wait for network or VPN connectivity."
+					},
 					"remreload.checkConnectivityCommand": {
 						"type": "string",
 						"default": "ping -t 1 -c 1 google.com",
-						"markdownDescription": "After the remote is disconnected, most likely the computer is waking from sleep and needs some time to reconnect to the network and possibly VPN. Remreload waits until this command returns success before triggering window reload."
+						"scope": "resource",
+						"markdownDescription": "Legacy SSH connectivity command setting. Remreload migrates explicitly configured values to `#remreload.remoteSsh.checkConnectivityCommand#` on activation.",
+						"markdownDeprecationMessage": "Use `#remreload.remoteSsh.checkConnectivityCommand#`. Remreload migrates this setting automatically on activation."
 					},
 					"remreload.logDebugLevel": {
 						"type": "string",
@@ -52,7 +75,7 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
+		"test": "mocha test/**/*.test.js"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.62.0",

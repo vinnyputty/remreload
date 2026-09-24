@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased]
+
+- Include timestamps and levels on every log line, omitting blank command-output lines.
+- Detect canceled tunnel filesystem requests as connection loss.
+- Support automatic reloads for Remote Tunnel sessions with an open remote folder or file.
+- Add independent enable settings and connectivity commands for SSH and tunnels.
+- Migrate configured `remreload.checkConnectivityCommand` values to the SSH command setting and notify users.
+
 ## [0.1.0]
 
  - Switch to different approach for detecting disconnected remote, using the SSH process.
